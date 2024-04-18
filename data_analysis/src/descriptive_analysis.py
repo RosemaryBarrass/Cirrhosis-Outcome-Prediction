@@ -29,10 +29,9 @@ print(data.describe())
 print("\nMissing values per column:")
 print(data.isnull().sum())
 
-# Visualizing Numerical Data
-print("\nPlotting histograms of numerical columns:")
-numerical_columns = [col for col in data.columns if col.startswith('num')]
-data[numerical_columns].hist(figsize=(12, 10))
+# Visualizing Data
+print("\nPlotting histograms:")
+data.hist(figsize=(12, 10))
 plt.suptitle('Histograms of Numerical Columns')
 plt.savefig(os.path.join(output_dir, 'histogram_num.png'))
 plt.close()
