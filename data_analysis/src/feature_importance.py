@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.impute import SimpleImputer
@@ -32,10 +33,6 @@ imputer = SimpleImputer(strategy='mean')  # You can choose other strategies if n
 data_imputed = pd.DataFrame(imputer.fit_transform(data), columns=data.columns)
 
 # Split the data into features and target
-X = data_imputed.drop('target_column', axis=1)  # Replace 'target_column' with your target column name
-y = data_imputed['target_column']
-
-
 X = data_imputed.drop(columns=['target'])
 y = data_imputed['target']
 
@@ -43,44 +40,76 @@ y = data_imputed['target']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Create a Random Forest Classifier model
-model = RandomForestClassifier(random_state=42)
+rfc = RandomForestClassifier(random_state=42)
 
-# Train the model on the training data
-model.fit(X_train, y_train)
+# Step 4: Initialize and train the LinearSVC classifier
+svc = LinearSVC()
+
+# Train the models on the training data
+rfc.fit(X_train, y_train)
+svc.fit(X_train, y_train)
 
 # Predict on the testing data
-y_pred = model.predict(X_test)
+y_pred_rfc = rfc.predict(X_test)
+y_pred_svc = svc.predict(X_test)
 
 # Calculate accuracy
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Accuracy on the test set: {accuracy:.2f}")
+accuracy_rfc = accuracy_score(y_test, y_pred_rfc)
+print(f"Accuracy for the Random Forest Classifier on the test set: {accuracy_rfc:.2f}")
+accuracy_svc = accuracy_score(y_test, y_pred_svc)
+print(f"Accuracy for the Linear SVC on the test set: {accuracy_svc:.2f}")
 
 # Retrieve feature importance values
-feature_importance = model.feature_importances_
+feature_importance_rfc = rfc.feature_importances_
+feature_importance_svc = svc.coef_
 
 # Create a DataFrame to hold feature importance values and feature names
-importance_df = pd.DataFrame({
+importance_rfc_df = pd.DataFrame({
     'Feature': X.columns,
-    'Importance': feature_importance
+    'Importance': feature_importance_rfc
 })
 
 # Sort the DataFrame by importance in descending order
-importance_df.sort_values(by='Importance', ascending=False, inplace=True)
+importance_rfc_df.sort_values(by='Importance', ascending=False, inplace=True)
 
 # Print the top features
-print("\nTop features by importance:")
-print(importance_df.head())
+print("\nTop features by importance according to Random Forest Classifier:")
+print(importance_rfc_df.head())
 
 # Plot feature importance
 plt.figure()
-sns.barplot(x='Importance', y='Feature', data=importance_df)
+sns.barplot(x='Importance', y='Feature', data=importance_rfc_df)
 plt.title('Feature Importance')
 plt.xlabel('Importance')
 plt.ylabel('Feature')
 # Save the plot as a PNG file
-plt.savefig(os.path.join(viz_dir, 'feature_importance.png'))
+plt.savefig(os.path.join(viz_dir, 'rfc_feature_importance.png'))
 plt.close()
 
 # Save the feature importance data as a CSV file
-importance_df.to_csv(os.path.join(viz_dir, 'feature_importance.csv'), index=False)
-print(f"Feature importance data saved to {os.path.join(viz_dir, 'feature_importance.csv')}")
+importance_rfc_df.to_csv(os.path.join(viz_dir, 'rfc_feature_importance.csv'), index=False)
+print(f"Random Forest feature importance data saved to {os.path.join(viz_dir, 'rfc_feature_importance.csv')}")
+
+n_classes = len(np.unique(y))
+for i in range(n_classes):
+    importance_svc_df = pd.DataFrame({
+        'Feature': X.columns,
+        'Importance': feature_importance_svc[i]
+    })
+    # Sort the DataFrame by importance in descending order
+    importance_svc_df.sort_values(by='Importance', ascending=False, inplace=True)
+    # Print the top features
+    print(f"\nTop features by importance according to Linear SVC for {i}:")
+    print(importance_svc_df.head())
+    # Plot feature importance
+    plt.figure()
+    sns.barplot(x='Importance', y='Feature', data=importance_svc_df)
+    plt.title('Feature Importance')
+    plt.xlabel('Importance')
+    plt.ylabel('Feature')
+    # Save the plot as a PNG file
+    plt.savefig(os.path.join(viz_dir, f'svc_feature_importance_{i}.png'))
+    plt.close()
+    # Save the feature importance data as a CSV file
+    importance_svc_df.to_csv(os.path.join(viz_dir, f'svc_feature_importance_{i}.csv'), index=False)
+    print(f"SVC feature importance data saved to {os.path.join(viz_dir, f'svc_feature_importance.csv_{i}')}")
