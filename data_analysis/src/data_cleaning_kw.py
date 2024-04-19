@@ -13,7 +13,7 @@ def replace_binary_columns(df, mappings):
 def encode_categorical_columns(df):
     encoder = OneHotEncoder(sparse=False)
     encoded_df = pd.DataFrame(encoder.fit_transform(df))
-    encoded_df.columns = encoder.get_feature_names_out(df.columns)  # Updated method
+    encoded_df.columns = encoder.get_feature_names_out(df.columns)
     return encoded_df
 
 
