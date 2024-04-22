@@ -26,15 +26,15 @@ file_path = os.path.join(current_dir, data_dir, feat_file)
 data = pd.read_csv(file_path)
 
 # Remove the data of the patients not included in the clinical trial
-data = data[data['cat__Ascites_nan'] != 1.0]
+data = data[data['onehot__Ascites_nan'] != 1.0]
 
 # Handle any other NaN values by imputing them
 imputer = SimpleImputer(strategy='mean')  # You can choose other strategies if needed
 data_imputed = pd.DataFrame(imputer.fit_transform(data), columns=data.columns)
 
 # Split the data into features and target
-X = data_imputed.drop(columns=['target'])
-y = data_imputed['target']
+X = data_imputed.drop(columns=['ordinal__Status'])
+y = data_imputed['ordinal__Status']
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
