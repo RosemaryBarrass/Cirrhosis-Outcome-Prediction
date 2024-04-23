@@ -20,8 +20,7 @@ file_path = os.path.join(current_dir, data_dir, feat_file)
 data = pd.read_csv(file_path)
 
 # Remove the data of the patients not included in the clinical trial
-data = data[data['onehot__Ascites_nan'] != 1.0]
-data = data.drop(columns=['onehot__Drug_nan', 'onehot__Ascites_nan', 'onehot__Hepatomegaly_nan', 'onehot__Spiders_nan'])
+data = data[data['bin__Ascites'].isin([0, 1])]
 
 k_values = list(range(2,10))
 
