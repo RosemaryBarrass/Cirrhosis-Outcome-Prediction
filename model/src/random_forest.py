@@ -64,7 +64,7 @@ plt.xlabel('Number of Trees')
 plt.ylabel('Accuracy Score')
 plt.title('Random Forest Accuracy vs. Number of Trees')
 plt.grid(True)
-plt.savefig(os.path.join(viz_dir, f'knnimpute_random_forest_num_trees.png'))
+plt.savefig(os.path.join(viz_dir, f'NEW_knnimpute_random_forest_num_trees.png'))
 plt.close()
 
 # Find the highest accuracy score
@@ -102,9 +102,9 @@ sns.barplot(x='Importance', y='Feature', data=importance_rfc_df)
 plt.xlabel('Feature Importance')
 plt.ylabel('Feature')
 plt.title('Random Forest Classifier Feature Importance')
-plt.savefig(os.path.join(viz_dir, f'knnimpute_rfc_feature_importance.png'))
+plt.savefig(os.path.join(viz_dir, f'NEW_knnimpute_rfc_feature_importance.png'))
 plt.close()
 
 # Save the feature importance data as a CSV file
-importance_rfc_df.to_csv(os.path.join(viz_dir, f'knnimpute_rfc_feature_importance.csv'), index=False)
+importance_rfc_df.to_csv(os.path.join(viz_dir, f'NEW_knnimpute_rfc_feature_importance.csv'), index=False)
 print(f"Random Forest Classifier feature importance data saved to {os.path.join(viz_dir, f'knnimpiute_rfc_feature_importance.csv')}")

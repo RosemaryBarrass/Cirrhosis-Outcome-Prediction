@@ -71,7 +71,7 @@ plt.xlabel('Number of Iterations')
 plt.ylabel('Accuracy Score')
 plt.title('Logistic Regression Accuracy with l2 Reg vs. Number of Iterations')
 plt.grid(True)
-plt.savefig(os.path.join(viz_dir, f'knnimpute_logreg_l2_stopping_times.png'))
+plt.savefig(os.path.join(viz_dir, f'NEW_knnimpute_logreg_l2_stopping_times.png'))
 plt.close()
 
 # Find the highest accuracy score
@@ -109,9 +109,9 @@ sns.barplot(x='Importance', y='Feature', data=importance_log_df)
 plt.xlabel('Feature Importance')
 plt.ylabel('Feature')
 plt.title('Logistic Regression with l2 Reg Feature Importance')
-plt.savefig(os.path.join(viz_dir, f'knnimpute_logreg_l2_feature_importance.png'))
+plt.savefig(os.path.join(viz_dir, f'NEW_knnimpute_logreg_l2_feature_importance.png'))
 plt.close()
 
 # Save the feature importance data as a CSV file
-importance_log_df.to_csv(os.path.join(viz_dir, f'knnimpute_logreg_l2_feature_importance.csv'), index=False)
+importance_log_df.to_csv(os.path.join(viz_dir, f'NEW_knnimpute_logreg_l2_feature_importance.csv'), index=False)
 print(f"Logistic Regression feature importance data saved to {os.path.join(viz_dir, f'knnimpute_logreg_l2_feature_importance.csv')}")
