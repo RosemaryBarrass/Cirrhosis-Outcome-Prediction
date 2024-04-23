@@ -1,9 +1,12 @@
 import os
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.preprocessing import OrdinalEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+
+def convert_to_binary(df):
+    return df.replace({'Y': 1, 'N': 0, 'Placebo':0, 'D-penicillamine':1, 'M':0, 'F':1})
 
 # Get the current working directory
 current_dir = os.getcwd()
@@ -31,23 +34,23 @@ print(raw_data.isnull().sum())
 # Define numerical and categorical columns
 # 'ID' an 'N_Days' columns are not included
 numerical_columns = raw_data[['Age', 'Bilirubin', 'Cholesterol', 'Albumin', 'Copper', 'Alk_Phos', 'SGOT', 'Tryglicerides', 'Platelets', 'Prothrombin']].columns
-onehot_columns = raw_data[['Drug','Sex', 'Ascites', 'Hepatomegaly', 'Spiders']].columns
+binary_columns = raw_data[['Drug','Sex', 'Ascites', 'Hepatomegaly', 'Spiders']].columns
 ordinal_columns = raw_data[['Status', 'Edema', 'Stage']].columns
 
-# Categorical Pipeline: One-hot encode data
-onehot_pipeline = Pipeline([
-    ('onehot', OneHotEncoder(handle_unknown='ignore')),  # One-hot encode 'Y' 'N' data
-])
+# Categorical Pipeline: binary encode data
+# binary_pipeline = Pipeline([
+#     ('converter', FunctionTransformer(convert_to_binary)) # Convert 'Y' 'N' to binary
+# ])
 
 # Categorical Pipeline: ordinal encode data
-ordinal_pipeline = Pipeline([
+ordinal_pipeline = Pipeline([ 
     ('ordinal', OrdinalEncoder(handle_unknown='error')),  # ordinal encode integer categorical data
 ])
 
 # Combine numerical and categorical pipelines
 preprocessor = ColumnTransformer([
     ('numerical', 'passthrough', numerical_columns),    # pass through numerical data, untouched
-    ('onehot', onehot_pipeline, onehot_columns),    # one-hot encode alll binary data
+    ('bin', 'passthrough', binary_columns),    # passthrough all binary data
     ('ordinal', ordinal_pipeline, ordinal_columns)  # ordinal encode data with stages
 ])
 
@@ -59,6 +62,7 @@ cleaned_data_df = pd.DataFrame(cleaned_data)
 
 # Assign column names to the cleaned data
 cleaned_data_df.columns = preprocessor.get_feature_names_out()
+cleaned_data_df = convert_to_binary(cleaned_data_df)
 
 # Display the cleaned data
 print(cleaned_data_df.head())
