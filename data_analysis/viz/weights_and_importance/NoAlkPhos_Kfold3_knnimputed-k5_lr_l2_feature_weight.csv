@@ -1,0 +1,17 @@
+Feature,Weight
+numerical__Age,0.27037083498420866
+bin__Sex,0.15777436832164307
+bin__Spiders,0.08367474990125162
+numerical__Albumin,-0.007240849733783427
+ordinal__Edema,-0.04251507270838885
+numerical__Tryglicerides,-0.08068819564270471
+numerical__Cholesterol,-0.09183341960498992
+numerical__SGOT,-0.13133785902437065
+bin__Drug,-0.17050802248438313
+numerical__Platelets,-0.19157281524001146
+bin__Ascites,-0.23805423778753879
+ordinal__Stage,-0.25898156193744293
+numerical__Prothrombin,-0.25976913155575315
+bin__Hepatomegaly,-0.28895887131638204
+numerical__Bilirubin,-0.3488662955240332
+numerical__Copper,-0.3930607380279254
